@@ -1,0 +1,9 @@
+==== Hand editted (for clarity) in the binary search part
+
+The string <ACGTGGCTCTCTAACGTACGTACGTACGGGGTTTATATATACCCTAGGACTCCCTTT> contains codon <ACG>
+
+The string <ACGTGGCTCTCTAACGTACGTACGTACGGGGTTTATATATACCCTAGGACTCCCTTT> does NOT contain codon <GAT>
+
+[BS] The sorted string <[(A, A, C), (A, C, G), (A, C, G), (A, C, T), (A, G, G), (A, T, A), (C, C, C), (C, C, T), (C, G, T), (C, T, C), (G, G, G), (G, T, A), (G, T, T), (T, A, C), (T, A, C), (T, A, T), (T, C, T), (T, G, G), (T, T, T)]> does contains codon <A, C, G>
+
+[BS] The sorted string <[(A, A, C), (A, C, G), (A, C, G), (A, C, T), (A, G, G), (A, T, A), (C, C, C), (C, C, T), (C, G, T), (C, T, C), (G, G, G), (G, T, A), (G, T, T), (T, A, C), (T, A, C), (T, A, T), (T, C, T), (T, G, G), (T, T, T)]> does NOT contain codon <G, A, T>

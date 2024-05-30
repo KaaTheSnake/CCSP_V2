@@ -14,11 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 def fib1(n: int) -> int:
     return fib1(n - 1) + fib1(n - 2)
 
-
 if __name__ == "__main__":
-    print(fib1(5))
+   print(fib1(5))
 # Note that this example is purposefully wrong.
+
+# -- end of file

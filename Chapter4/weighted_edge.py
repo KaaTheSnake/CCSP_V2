@@ -13,10 +13,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# Listing 4.6; File: weighted_edge.py
+
 from __future__ import annotations
 from dataclasses import dataclass
 from edge import Edge
-
 
 @dataclass
 class WeightedEdge(Edge):
@@ -24,10 +26,25 @@ class WeightedEdge(Edge):
 
     def reversed(self) -> WeightedEdge:
         return WeightedEdge(self.v, self.u, self.weight)
-
     # so that we can order edges by weight to find the minimum weight edge
+
     def __lt__(self, other: WeightedEdge) -> bool:
         return self.weight < other.weight
 
     def __str__(self) -> str:
-        return f"{self.u} {self.weight}> {self.v}"
+        return f"{self.u} {self.weight} > {self.v}"
+
+if __name__ == "__main__":
+#%%S
+   object_methods = [method_name for method_name in dir(WeightedEdge)
+                     if callable(getattr(WeightedEdge, method_name))]
+  #print("@@ WeightedEdge: <{a}>".format(a=object_methods) )
+   print("@@ WeightedEdge: <{a}>".format(a=object_methods) )
+
+   object_methods = [method_name for method_name in dir(WeightedEdge)
+                     if callable(getattr(WeightedEdge, method_name))]
+  #print("@@ WeightedEdge: <{a}>".format(a=object_methods) )
+   print("@@ WeightedEdge: <{a}>".format(a=object_methods) )
+
+#%%E
+# -- end of file

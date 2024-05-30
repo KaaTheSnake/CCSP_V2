@@ -43,8 +43,8 @@ def generate_domain(word: str, grid: Grid) -> List[List[GridLocation]]:
     length: int = len(word)
     for row in range(height):
         for col in range(width):
-            columns: range = range(col, col + length)
-            rows: range = range(row, row + length)
+            columns: range = range(col, col + length + 1)
+            rows: range = range(row, row + length + 1)
             if col + length <= width:
                 # left to right
                 domain.append([GridLocation(row, c) for c in columns])
@@ -55,7 +55,7 @@ def generate_domain(word: str, grid: Grid) -> List[List[GridLocation]]:
                 # top to bottom
                 domain.append([GridLocation(r, col) for r in rows])
                 # diagonal towards bottom left
-                if col + 1 - length >= 0:
+                if col - length >= 0:
                     domain.append([GridLocation(r, col - (r - row)) for r in rows])
     return domain
 

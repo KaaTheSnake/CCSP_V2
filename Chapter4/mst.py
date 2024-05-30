@@ -13,6 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# Listing 4.(10-X); File: mst.py
+
 from typing import TypeVar, List, Optional
 from weighted_graph import WeightedGraph
 from weighted_edge import WeightedEdge
@@ -21,45 +24,44 @@ from priority_queue import PriorityQueue
 V = TypeVar('V') # type of the vertices in the graph
 WeightedPath = List[WeightedEdge] # type alias for paths
 
-
 def total_weight(wp: WeightedPath) -> float:
     return sum([e.weight for e in wp])
 
-
+#-------------
 def mst(wg: WeightedGraph[V], start: int = 0) -> Optional[WeightedPath]:
     if start > (wg.vertex_count - 1) or start < 0:
-        return None
+       return None
     result: WeightedPath = [] # holds the final MST
     pq: PriorityQueue[WeightedEdge] = PriorityQueue()
-    visited: List[bool] = [False] * wg.vertex_count # where we've been
-
+    visited: List[bool] = [False] * wg.vertex_count # Where we have been
+    
     def visit(index: int):
         visited[index] = True # mark as visited
         for edge in wg.edges_for_index(index):
             # add all edges coming from here to pq
             if not visited[edge.v]:
-                pq.push(edge)
+               pq.push(edge)
 
     visit(start) # the first vertex is where everything begins
 
     while not pq.empty: # keep going while there are edges to process
         edge = pq.pop()
         if visited[edge.v]:
-            continue # don't ever revisit
+           continue # don't ever revisit
         # this is the current smallest, so add it to solution
         result.append(edge)
-        visit(edge.v) # visit where this connects
+        visit(edge.v)
 
     return result
-
-
+#-------------
 def print_weighted_path(wg: WeightedGraph, wp: WeightedPath) -> None:
     for edge in wp:
         print(f"{wg.vertex_at(edge.u)} {edge.weight}> {wg.vertex_at(edge.v)}")
     print(f"Total Weight: {total_weight(wp)}")
-
+#-------------
 
 if __name__ == "__main__":
+
     city_graph2: WeightedGraph[str] = WeightedGraph(["Seattle", "San Francisco", "Los Angeles", "Riverside", "Phoenix", "Chicago", "Boston", "New York", "Atlanta", "Miami", "Dallas", "Houston", "Detroit", "Philadelphia", "Washington"])
 
     city_graph2.add_edge_by_vertices("Seattle", "Chicago", 1737)
@@ -94,3 +96,5 @@ if __name__ == "__main__":
         print("No solution found!")
     else:
         print_weighted_path(city_graph2, result)
+
+# -- end of file

@@ -1,38 +1,28 @@
-# From Classic Computer Science Problems in Python Chapter 4
-# Copyright 2018 David Kopec
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
-# Listing L4.(2-4); File: graph.py
+# Listing L4.5; File: graph_bfs.py
+# Plus extra output features
 
 from typing import TypeVar, Generic, List, Optional
 from edge import Edge
 
+import sys
+sys.path.insert(0,'..')
+from Chapter2.generic_search import bfs, Node, node_to_path
+
 V = TypeVar('V') # type of the vertices in the graph
+
+# CityGraph data structure is a List, when each entry is a list of Edges
+#  C[0] = [
+#          [ Edge,   # (u:0, v: 5)  Seattle -> Chicago
+#            Edge]   # (u:0, v: 1)  Seattle -> San Francisco
+#         ]
+
 
 class Graph(Generic[V]):
     #--------------------------------------------------------------
     def __init__(self, vertices: List[V] = []) -> None:
-       #print("@@ type(vertices): <{a}>; vertices: <{b}>".format(
-       #  a=type(vertices),b=vertices) )
-
         self._vertices: List[V] = vertices
-       #print("@@ type(self._vertices): <{a}>, self.__vertices".format(
-       #  a=type(self._vertices),b=self._vertices) )
-
         self._edges: List[List[Edge]] =  [ [] for _ in vertices]
-       #print("@@ type(self._edges): <{a}>, self_edges: <{b}>".format(
-       #  a=type(self._edges),b=self._edges) )
     #--------------------------------------------------------------
     @property
     def vertex_count(self) -> int:
@@ -85,7 +75,7 @@ class Graph(Generic[V]):
     def edges_for_index(self, index: int) -> List[Edge]:
         return self._edges[index]
     #--------------------------------------------------------------
-    # Look up the index of a vertex and return its edges (convenience method)
+    # Look up the index of a vertex and return its edges (convencience method)
     def edges_for_vertex(self, vertex: V) -> List[V]:
         return self.edges_for_index(self.index_of(vertex))
     #--------------------------------------------------------------
@@ -100,15 +90,15 @@ class Graph(Generic[V]):
 
 if __name__ == "__main__":
 
-#%%S
-   object_methods = [method_name for method_name in dir(Graph)
+   # Find callable methods of Graph
+   graph_methods = [method_name for method_name in dir(Graph)
                      if callable(getattr(Graph, method_name))]
-  #print("@@ Graph_methods: <{a}>".format(a=object_methods) )
+  #print("@@ Graph_methods: <{a}>".format(a=graph_methods) )
 
-   object_methods = [method_name for method_name in dir(Edge)
+   # Find callable methods of Edge
+   edge_methods = [method_name for method_name in dir(Edge)
                      if callable(getattr(Edge, method_name))]
-  #print("@@ Edge_methods: <{a}>".format(a=object_methods) )
-#%%E
+  #print("@@ Edge_methods: <{a}>".format(a=edge_methods) )
 
    # test basic Graph construction
    city_graph:Graph[str] = Graph(
@@ -120,12 +110,7 @@ if __name__ == "__main__":
    )
 
    city_graph.add_edge_by_vertices("Seattle","Chicago")
-   for i in range(0,len(city_graph._edges)):
-     print("Q0 [{a}] <{b}>".format(a=i,b=city_graph._edges[i]) )
-
    city_graph.add_edge_by_vertices("Seattle","San Francisco")
-   for i in range(0,len(city_graph._edges)):
-     print("Q1 [{a}] <{b}>".format(a=i,b=city_graph._edges[i]) )
 
    city_graph.add_edge_by_vertices("San Francisco","Riverside")
    city_graph.add_edge_by_vertices("San Francisco","Los Angeles")
@@ -164,18 +149,37 @@ if __name__ == "__main__":
 
    city_graph.add_edge_by_vertices("Philadelphia","Washington")
 
-   # Print out the now populated city_graph
-   print(city_graph) # Uses __str__
+   print(city_graph) # Depends of __str__ defined here
 
-   # Output the citys
-   print("@@ type(city_graph._vertices): <{a}>".format(a=type(city_graph._vertices)) )
-   for i in range(0,len(city_graph._vertices)):
-       print("city_graph._vertices[{a}] <{b}>".format(a=i,b=city_graph._vertices[i]) )
-   print(" ")
-
-   # Output the Edges
-   print("@@ type(city_graph._edges): <{a}>".format(a=type(city_graph._edges)) )
+   print("=============")
    for i in range(0,len(city_graph._edges)):
-       print("city_graph._edges[{a}] <{b}>".format(a=i,b=city_graph._edges[i]) )
+      print("City[{a:02d}]: <{b}>".format(
+		a=i,b=city_graph.vertex_at(i)) )
+      A = city_graph.vertex_at(i)
+      B = city_graph._edges[i]
+      C = len(city_graph._edges[i])
+      for i2 in range(0,C):
+         E_u = city_graph._edges[i][i2].u
+         E_u_name = city_graph.vertex_at(E_u)
+         E_v = city_graph._edges[i][i2].v
+         E_v_name = city_graph.vertex_at(E_v)
+         print("\t ({a}) {b} => {d} ({c})".format(a=E_u,b=E_u_name,c=E_v,d=E_v_name) )
+      print("=============")
+
+#%%S
+   print(" ")
+   # The ':Optional [Node[V]]' is not required. I think it was added to clarify
+   # what 'bfs' is passing back.
+   bfs_result: Optional [Node[V]] = bfs("Boston",
+                                        lambda x: x == 'Miami',
+                                        city_graph.neighbors_for_vertex)
+   if bfs_result is None:
+      print("No solution found using breadth-first search")
+   else:
+      # 'List[V]' is a cast of result to 'path'
+      path: List[V] = node_to_path(bfs_result)
+      print("Path from Boston to Miami")
+      print(path)
+#%%E
 
 # -- end of file

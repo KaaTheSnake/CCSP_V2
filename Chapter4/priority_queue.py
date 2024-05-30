@@ -1,4 +1,3 @@
-# priority_queue.py
 # From Classic Computer Science Problems in Python Chapter 4
 # Copyright 2018 David Kopec
 #
@@ -13,26 +12,34 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# Listing 4.9; File: priority_queue.py
+
 from typing import TypeVar, Generic, List
-from heapq import heappush, heappop
+from heapq import heappush,heappop
 
-
-T = TypeVar('T')
-
+T = TypeVar('T') # type of the vertices in the graph
 
 class PriorityQueue(Generic[T]):
+    #--------------------------------------------------------------
     def __init__(self) -> None:
         self._container: List[T] = []
-
     @property
     def empty(self) -> bool:
-        return not self._container  # not is true for empty container
-
-    def push(self, item: T) -> None:
-        heappush(self._container, item)  # in by priority
+        return not self._container # not is true for empty container
+    
+    def push(self, item: T) -> T:
+        return heappush(self._container, item) # in by priority 
 
     def pop(self) -> T:
-        return heappop(self._container)  # out by priority
+        return heappop(self._container) # out by priority 
 
     def __repr__(self) -> str:
         return repr(self._container)
+
+if __name__ == "__main__":
+   print("Hi from priority_queue.py")
+
+   print("=============")
+
+# -- end of file
